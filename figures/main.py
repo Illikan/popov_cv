@@ -19,22 +19,30 @@ fig_list = []
 fig_dict = {}
 
 #Получаем список всех структурирующих элементов 3х3 в которых серединный элемент не нулевой
-for y in range(2, labeled.shape[0] -4):
-    for x in range(2, labeled.shape[1] - 4):
+for y in range(2, labeled.shape[0] -2):
+    for x in range(2, labeled.shape[1] - 2):
         if image[y, x]  != 0:
             zone = zone_3x3(image, y, x)
             if np.sum(zone) == 5:
                 fig_list.append(zone)
 
 #Получаем из них словарь в котором уникальные структурирующие элементы - ключи, а значения - количество соответствующих элементов
-for arr in np.unique(fig_list, axis=0):
+fig_list = np.unique(fig_list, axis=0)
+for arr in fig_list:
     fig_dict[tuple(map(tuple, arr))] = 0
- 
+
 #Для каждого маркированного элемента проверяем, является ли он одним из найденных нами элементов и если да, то прибавляем к соответсвующему элементу словаря 1   
 for i in range(1, all_figures+1):
-    for arr in np.unique(fig_list, axis=0):
+    for arr in fig_list:
         check = labeled == i
-        if np.array_equal(check, binary_erosion(check, arr)):
-            fig_dict[tuple(map(tuple, arr))] += 1
+        for y in range(2, labeled.shape[0] -2):
+            for x in range(2, labeled.shape[1] - 2):
+                if image[y, x]  != 0:
+                    zone = zone_3x3(image, y, x)
+                    if np.array_equal(arr, zone):
+                        fig_dict[tuple(map(tuple, arr))] += 1
 
+for key, value in fig_dict.items():
+    print(f'Фигур вида {key}: {value}')
+print(f'Всего фигур {all_figures}')
 # На моем ноутбуке итоговое время выполнения составляет больше 40 секунд, мне больно, я даже не могу проверить работает ли программа тк не хватает терпения ждать)
