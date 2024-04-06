@@ -61,12 +61,13 @@ def recognize(region):
             if has_line(region, False):
                 return "1"
             if has_line(region):
-                plt.imshow(region.image)
-                plt.show()
+            
                 return "*"
             inv = np.logical_not(region.image)
             labeled = label(inv)
             holes = labeled.max()
+            plt.imshow(region.image)
+            plt.show()
             match holes:
                 case 2:
                     return "/"
@@ -92,6 +93,6 @@ result = defaultdict(lambda: 0)
 for region in regionprops(labeled):
     result[recognize(region)] += 1
 print(result)
-#plt.title(f"Holes = {count_holes(regions[nfig])}")
-#plt.imshow(regions[nfig].image)
+# plt.title(f"Holes = {count_holes(regions[nfig])}")
+plt.imshow(labeled)
 plt.show()
