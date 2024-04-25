@@ -19,7 +19,7 @@ for i in range(1, numLabels):
         area = stats[i, cv2.CC_STAT_AREA]
         (cX, cY) = centroids[i]
 
-        smol = img[y:y+h, x:x+w]          
+        smol = imghsv[y:y+h, x:x+w]          
         key = smol[h//2, w//2, 0]
         if(area == w*h):
             if key not in colors_dict_rectangle.keys():
